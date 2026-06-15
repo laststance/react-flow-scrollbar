@@ -1,5 +1,6 @@
 import {
   useNodes,
+  useNodesInitialized,
   useReactFlow,
   useStore,
   useViewport,
@@ -131,10 +132,18 @@ export const useBoundedReactFlowViewport = (
     [sourceNodes],
   );
 
-  // ISSUE-4: run the O(n) getNodesBounds once per node change; per-frame metrics are then O(1).
+  // React Flow measures unsized nodes asynchronously and writes the dimensions into the store
+  // nodeLookup — NOT necessarily into a new `nodes` array. This signal flips false→true when that
+  // measurement completes, forcing the bounds memo below to re-read the now-measured nodeLookup so
+  // the bars appear (without it, a static `nodes` prop would cache degenerate pre-measure bounds).
+  const nodesInitialized = useNodesInitialized();
+
+  // ISSUE-4: run the O(n) getNodesBounds once per node change (or when measurement lands); per-frame
+  // metrics are then O(1). getBounds reads the mutable store nodeLookup, so its real input is invisible
+  // to exhaustive-deps; nodesInitialized is the trigger that recomputes once async measurement lands.
   const memoizedBounds = useMemo(
     () => (visibleNodes.length > 0 ? getBounds(visibleNodes) : undefined),
-    [visibleNodes, getBounds],
+    [visibleNodes, getBounds, nodesInitialized],
   );
   // A bounds resolver that returns the memoized rect so the pure helpers do not recompute per frame.
   const reuseBounds = useCallback<GetNodesBounds>(

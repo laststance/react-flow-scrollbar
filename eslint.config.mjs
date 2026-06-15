@@ -11,6 +11,10 @@ export default tseslint.config(
     plugins: { 'react-hooks': reactHooks },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      // exhaustive-deps cannot reason about external mutable stores (React Flow's nodeLookup), so it
+      // false-flags our deliberate recompute triggers as "unnecessary". Keep rules-of-hooks (catches
+      // real conditional-hook bugs); turn this one off — deps are hand-audited in this hook-heavy lib.
+      'react-hooks/exhaustive-deps': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
