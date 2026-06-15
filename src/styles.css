@@ -1,0 +1,67 @@
+/*
+ * react-flow-scrollbar — default theme.
+ * Import once: `import 'react-flow-scrollbar/styles.css'`.
+ *
+ * Per-frame geometry (track length, thumb size/offset) is applied inline by the component and is
+ * NOT themeable. Everything below is the static look: colors, radius, and the track thickness, all
+ * exposed as CSS variables on the `.react-flow-scrollbars` root. Override them with your own rule,
+ * the `className`/`style` props, or per-axis `[data-axis]` selectors.
+ */
+
+.react-flow-scrollbars {
+  --rf-scrollbar-track-size: 12px;
+  --rf-scrollbar-track-color: rgba(0, 0, 0, 0.04);
+  --rf-scrollbar-thumb-color: rgba(0, 0, 0, 0.35);
+  --rf-scrollbar-thumb-color-hover: rgba(0, 0, 0, 0.5);
+  --rf-scrollbar-radius: 6px;
+
+  /* Overlay that fills the React Flow pane without blocking it; the bars opt back in to pointers. */
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.react-flow-scrollbars__track {
+  position: absolute;
+  pointer-events: auto;
+  background-color: var(--rf-scrollbar-track-color);
+}
+
+/* Horizontal bar: pinned to the bottom edge, thickness from the track-size var, length set inline. */
+.react-flow-scrollbars__track[data-axis='x'] {
+  left: 0;
+  bottom: 0;
+  height: var(--rf-scrollbar-track-size);
+}
+
+/* Vertical bar: pinned to the right edge, thickness from the track-size var, length set inline. */
+.react-flow-scrollbars__track[data-axis='y'] {
+  top: 0;
+  right: 0;
+  width: var(--rf-scrollbar-track-size);
+}
+
+.react-flow-scrollbars__thumb {
+  position: absolute;
+  pointer-events: auto;
+  background-color: var(--rf-scrollbar-thumb-color);
+  border-radius: var(--rf-scrollbar-radius);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.react-flow-scrollbars__thumb:hover {
+  background-color: var(--rf-scrollbar-thumb-color-hover);
+}
+
+/* Thumb cross-size is the track thickness minus the 1px inset on each side; offset/length set inline. */
+.react-flow-scrollbars__thumb[data-axis='x'] {
+  top: 1px;
+  height: calc(var(--rf-scrollbar-track-size) - 2px);
+}
+
+.react-flow-scrollbars__thumb[data-axis='y'] {
+  left: 1px;
+  width: calc(var(--rf-scrollbar-track-size) - 2px);
+}
