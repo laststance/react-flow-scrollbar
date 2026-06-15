@@ -14,15 +14,27 @@ import {
 import '@xyflow/react/dist/style.css';
 import 'react-flow-scrollbar/styles.css';
 
+// High-contrast node look so the demo reads clearly on screen and on video. Deliberately sets NO
+// width/height — sizing still comes from React Flow's async measurement (see INITIAL_NODES below).
+const NODE_STYLE: Node['style'] = {
+  background: '#1e293b',
+  color: '#f8fafc',
+  border: '1px solid #475569',
+  borderRadius: 8,
+  padding: '10px 18px',
+  fontSize: 13,
+  fontWeight: 600,
+};
+
 // A wide AND tall graph so content overflows the 800×600 pane on both axes (both bars visible at
 // zoom 1). Nodes carry NO explicit width/height, so React Flow measures them asynchronously after
 // mount — the exact path that regressed: the bars must still appear once measurement lands.
 const INITIAL_NODES: Node[] = [
-  { id: 'a', position: { x: 0, y: 0 }, data: { label: 'A · top-left' } },
-  { id: 'b', position: { x: 900, y: 140 }, data: { label: 'B' } },
-  { id: 'c', position: { x: 240, y: 720 }, data: { label: 'C' } },
-  { id: 'd', position: { x: 1180, y: 860 }, data: { label: 'D · bottom-right' } },
-  { id: 'e', position: { x: 1680, y: 420 }, data: { label: 'E · far right' } },
+  { id: 'a', position: { x: 0, y: 0 }, data: { label: 'A · top-left' }, style: NODE_STYLE },
+  { id: 'b', position: { x: 900, y: 140 }, data: { label: 'B' }, style: NODE_STYLE },
+  { id: 'c', position: { x: 240, y: 720 }, data: { label: 'C' }, style: NODE_STYLE },
+  { id: 'd', position: { x: 1180, y: 860 }, data: { label: 'D · bottom-right' }, style: NODE_STYLE },
+  { id: 'e', position: { x: 1680, y: 420 }, data: { label: 'E · far right' }, style: NODE_STYLE },
 ];
 
 const INITIAL_EDGES: Edge[] = [

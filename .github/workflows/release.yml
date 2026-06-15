@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+# Never run two releases at once — a second push waits rather than racing the publish.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: version PR · publish to npm
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # let Changesets push the "Version Packages" PR and the git tag
+      pull-requests: write # let Changesets open/update that PR
+      id-token: write # mint the OIDC token npm signs the provenance attestation with
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+      # When changesets are present this opens/updates the "Version Packages" PR; once that PR is
+      # merged (consuming the changesets) the same step runs `pnpm release` to publish to npm.
+      # `publishConfig.provenance: true` in package.json + the id-token permission above produce a
+      # signed provenance attestation on the published tarball.
+      - name: Create release PR or publish
+        uses: changesets/action@v1
+        with:
+          version: pnpm changeset version
+          publish: pnpm release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Classic automation token with publish rights. Prefer npm Trusted Publishing (tokenless
+          # OIDC) once the package exists: configure it on npmjs.com and drop this secret + line.
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
