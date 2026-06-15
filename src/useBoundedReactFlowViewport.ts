@@ -57,8 +57,12 @@ export type BoundedReactFlowViewportController = {
  *
  * @param next - the freshly computed extent (or undefined)
  * @returns the prior array when value-equal, else `next`
+ * @example
+ * // same four numbers across a zoom frame → identical reference (no re-clamp)
+ * useStableExtent([[-30,-30],[610,258]]) === useStableExtent([[-30,-30],[610,258]])
  */
-const useStableExtent = (
+// Exported for unit testing only — intentionally NOT re-exported from the public barrel (index.ts).
+export const useStableExtent = (
   next: CoordinateExtent | undefined,
 ): CoordinateExtent | undefined => {
   const ref = useRef<CoordinateExtent | undefined>(next);
