@@ -1,0 +1,4 @@
+# esbuild ships a platform binary via a postinstall script that tsup needs,
+# so it must be allowed to run its build script.
+allowBuilds:
+  esbuild: true

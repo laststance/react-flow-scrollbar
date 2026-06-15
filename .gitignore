@@ -1,0 +1,14 @@
+node_modules
+dist
+coverage
+*.log
+logs
+.DS_Store
+.idea
+.vscode
+*.tsbuildinfo
+test-results
+playwright-report
+blob-report
+.turbo
+CLAUDE.md
