@@ -8,6 +8,10 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # These bumps auto-merge without human review, so wait a week after a release before adopting it —
+    # a window for a compromised action release to be caught/yanked before it auto-merges here.
+    cooldown:
+      default-days: 7
     groups:
       # One grouped PR per week instead of one per action.
       github-actions:
@@ -19,6 +23,11 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # Quarantine freshly-published versions before proposing them: pnpm 11.6's minimumReleaseAge policy
+    # (24h cutoff) rejects too-new packages during CI install, so without this the weekly PR lands red
+    # until the versions age. 7 days also lets a malicious release surface and be yanked before it reaches us.
+    cooldown:
+      default-days: 7
     groups:
       npm-dev:
         dependency-type: development
