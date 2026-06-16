@@ -1,0 +1,33 @@
+---
+title: react-flow-scrollbar
+description: Viewport-synced scrollbars and zoom-aware bounded panning for React Flow / @xyflow/react v12.
+---
+
+React Flow ships a MiniMap, Controls, Background, and Panel — but **no scrollbar**. This package
+adds draggable, click-to-jump scrollbars that stay in two-way sync with the React Flow viewport,
+plus the `translateExtent` pan-clamp that keeps the canvas inside its bounds so the bars never lie
+about where you are.
+
+## Requirements
+
+These are **peer dependencies** — they are not bundled, because you already have them in a React
+Flow app:
+
+- **`@xyflow/react` ≥ 12** — React Flow v12.
+- **`react` ^18 || ^19**.
+
+## Features
+
+- 🖱️ **Draggable thumbs** — grab and drag, exactly like a native scrollbar.
+- 👆 **Click-to-jump** — click an empty part of the track to page toward it.
+- 🔄 **Two-way viewport sync** — pan or zoom the canvas and the bars follow; drag a bar and the canvas follows.
+- 🔍 **Zoom-aware bounds** — the `translateExtent` pan-clamp is computed in world coordinates at the **current zoom**, so panning doesn't snap or drift when zoomed in or out.
+- 🧩 **Subflow-correct** — bounds resolve absolute node positions through React Flow's internal node lookup, so nodes inside groups are measured where they actually render.
+- 🎨 **Themeable** — plain CSS variables on a single root class; no CSS-in-JS, no runtime style engine.
+- ⚡ **One pass per change** — the O(n) bounds calculation runs once per node change; per-frame updates are O(1) and coalesced into a single `requestAnimationFrame`.
+- 📦 **Tiny & typed** — ships ESM + CJS + `.d.ts`, tree-shakeable, side-effect-free except the stylesheet.
+
+## Next steps
+
+- **[Installation](/docs/installation)** — add the package and its stylesheet.
+- **[Quick Start](/docs/quick-start)** — a live, interactive demo with the full source.

@@ -1,0 +1,16 @@
+# dependencies
+node_modules
+
+# next.js / build output
+.next
+out
+
+# fumadocs-mdx generated collections index
+.source
+
+# vercel
+.vercel
+
+# typescript / next env
+next-env.d.ts
+*.tsbuildinfo

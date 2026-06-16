@@ -1,0 +1,45 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/shadcn.css';
+@import 'fumadocs-ui/css/preset.css';
+
+/* Tailwind v4 must scan Fumadocs UI's compiled classes (path is relative to THIS file). */
+@source '../node_modules/fumadocs-ui/dist/**/*.js';
+
+/*
+ * Design tokens — technical-minimal, dark-first (design doc §13.2).
+ * Dark is the default theme (app/layout.tsx RootProvider); light is supported via the toggle.
+ * Only the roles the design pins are overridden; everything else inherits the shadcn preset.
+ * Accent-restraint rule: indigo (#6366F1) appears ONLY on links / active-tab underline / focus
+ * ring / copy-confirm / the single primary CTA — never as a fill on neutral surfaces.
+ */
+:root {
+  --color-fd-background: #ffffff;
+  --color-fd-foreground: #0a0a0b;
+  --color-fd-card: #fafafa;
+  --color-fd-popover: #fafafa;
+  --color-fd-border: #e4e4e7;
+  --color-fd-muted-foreground: #52525b;
+  --color-fd-primary: #6366f1;
+  --color-fd-primary-foreground: #ffffff;
+  --color-fd-accent: #f4f4f5;
+  --color-fd-ring: #6366f1;
+
+  /* Faint text — raw token (no fd role). WCAG-verified ≥4.5:1, design doc §13.2 (TODO-2b). */
+  --rfs-text-faint: #71717a; /* light: 4.63:1 on card #FAFAFA */
+}
+
+.dark {
+  --color-fd-background: #0a0a0b;
+  --color-fd-foreground: #fafafa;
+  --color-fd-card: #111114;
+  --color-fd-popover: #111114;
+  --color-fd-border: #26262b;
+  --color-fd-muted-foreground: #a1a1aa;
+  --color-fd-primary: #6366f1;
+  --color-fd-primary-foreground: #ffffff;
+  --color-fd-accent: #18181b;
+  --color-fd-ring: #6366f1;
+
+  /* Lightened from #71717A (which fails at 3.90:1 on the dark card) to clear the 4.5:1 bar. */
+  --rfs-text-faint: #85858e; /* dark: 5.15:1 on card #111114 */
+}

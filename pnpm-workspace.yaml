@@ -1,4 +1,10 @@
+# The docs site lives in `website/` as an isolated workspace package so Next.js + Fumadocs stay out
+# of the published library's deps and CI (the library itself stays at the repo root).
+packages:
+  - website
+
 # esbuild ships a platform binary via a postinstall script that tsup needs,
 # so it must be allowed to run its build script.
 allowBuilds:
   esbuild: true
+  sharp: false

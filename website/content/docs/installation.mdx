@@ -1,0 +1,34 @@
+---
+title: Installation
+description: Install react-flow-scrollbar and import its stylesheet alongside React Flow's.
+---
+
+## Install the package
+
+```bash
+npm install react-flow-scrollbar
+```
+
+```bash
+pnpm add react-flow-scrollbar
+```
+
+```bash
+yarn add react-flow-scrollbar
+```
+
+> **Peer dependencies:** `@xyflow/react >=12` and `react ^18 || ^19`. They are not bundled — you
+> already have them in a React Flow app.
+
+## Import the styles
+
+The scrollbars are styled with plain CSS variables, so you import one stylesheet — **after** React
+Flow's own stylesheet:
+
+```tsx
+import '@xyflow/react/dist/style.css';
+import 'react-flow-scrollbar/styles.css';
+```
+
+That's all the setup. Head to the **[Quick Start](/docs/quick-start)** for a working, interactive
+example with its full source.
