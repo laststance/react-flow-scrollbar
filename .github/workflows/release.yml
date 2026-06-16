@@ -9,35 +9,41 @@ concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
 
+permissions:
+  contents: write # let Changesets push the "Version Packages" PR and the git tag
+  pull-requests: write # let Changesets open/update that PR
+  id-token: write # mint the OIDC token npm trusted publishing exchanges for a short-lived publish token (+ provenance)
+
 jobs:
   release:
     name: version PR · publish to npm
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # let Changesets push the "Version Packages" PR and the git tag
-      pull-requests: write # let Changesets open/update that PR
-      id-token: write # mint the OIDC token npm signs the provenance attestation with
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      # Actions are pinned to a commit SHA, not a moving tag: a tag like @v6 can be repointed at malicious
+      # code (a tag-hijack supply-chain attack); a SHA cannot. Dependabot (.github/dependabot.yml) keeps the
+      # pins current.
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
-          node-version: 20
+          fetch-depth: 0 # Changesets needs full history + tags to compute what to version/publish
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9 (reads packageManager: pnpm@11.6.0)
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24 # OIDC trusted publishing requires npm >= 11.5.1 / Node >= 22.14; Node 24 ships npm 11.x
           cache: pnpm
           registry-url: https://registry.npmjs.org
-      - run: pnpm install --frozen-lockfile
-      # When changesets are present this opens/updates the "Version Packages" PR; once that PR is
-      # merged (consuming the changesets) the same step runs `pnpm release` to publish to npm.
-      # `publishConfig.provenance: true` in package.json + the id-token permission above produce a
-      # signed provenance attestation on the published tarball.
+      # --ignore-scripts blocks a malicious postinstall anywhere in the dependency tree from running in the
+      # publish job. Verified the tsup/esbuild build still succeeds without install scripts.
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      # When changesets are present this opens/updates the "Version Packages" PR; once that PR is merged
+      # (consuming the changesets) the same step runs `pnpm release` to publish to npm.
       - name: Create release PR or publish
-        uses: changesets/action@v1
+        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
         with:
           version: pnpm changeset version
           publish: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Classic automation token with publish rights. Prefer npm Trusted Publishing (tokenless
-          # OIDC) once the package exists: configure it on npmjs.com and drop this secret + line.
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # No NPM_TOKEN / NODE_AUTH_TOKEN on purpose: npm trusted publishing authenticates tokenlessly via the
+          # OIDC id-token minted above. Configure the trusted publisher on npmjs.com (this repo + workflow
+          # filename "release.yml") for the package first — see the publish steps in the repo README/notes.
+          # `publishConfig.provenance: true` in package.json adds a signed provenance attestation to the tarball.

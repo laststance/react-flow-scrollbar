@@ -1,0 +1,25 @@
+version: 2
+updates:
+  # Keep the SHA-pinned GitHub Actions current. Pins never drift on their own, so without this they rot;
+  # Dependabot bumps the SHA + its `# vX.Y.Z` comment together. These bumps are auto-merged once CI passes
+  # (see .github/workflows/dependabot-auto-merge.yml) — low risk, since they only move first-party actions
+  # between reviewed releases.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # One grouped PR per week instead of one per action.
+      github-actions:
+        patterns: ['*']
+
+  # npm dependency updates. Deliberately NOT auto-merged: the dependency tree is the actual supply-chain
+  # attack surface, so these PRs wait for a human to review the diff before merging.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      npm-dev:
+        dependency-type: development
+        patterns: ['*']
