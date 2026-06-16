@@ -55,7 +55,7 @@ const getNodeAbsolutePosition = (node: Node): XYPosition =>
  *   containerWidth: 800,
  *   containerHeight: 600,
  *   reactFlowViewport: { x: -100, y: -50, zoom: 1 },
- *   scrollbarTrackSize: 12,
+ *   scrollbarTrackSize: 8,
  *   minThumbSize: 32,
  * });
  */

@@ -126,7 +126,7 @@ Returns a `BoundedReactFlowViewportController`. Call it inside a component under
 | -------------- | -------- | ------- | ---------------------------------------------------------------------------------- |
 | `nodes`        | `Node[]` | store   | Nodes whose bounds define the scroll area. Defaults to the store nodes (`useNodes()`). Pass your controlled array for the most robust first-render bounds. |
 | `margin`       | `number` | `30`    | Content-edge inset in **flow coordinates** — breathing room around the outermost nodes. |
-| `trackSize`    | `number` | `12`    | Scrollbar track thickness in **px**. The component renders the track at this size so geometry matches. |
+| `trackSize`    | `number` | `8`     | Scrollbar track thickness in **px**. The component renders the track at this size so geometry matches. |
 | `minThumbSize` | `number` | `32`    | Minimum thumb length in **px**, so the thumb stays grabbable on huge canvases.      |
 
 #### Returns — `BoundedReactFlowViewportController`
@@ -186,20 +186,24 @@ The static look — colors, radius, track thickness — is plain CSS variables o
 inline by the component and is intentionally **not** themeable. Override the variables with your
 own rule, the `className` / `style` props, or per-axis `[data-axis]` selectors.
 
-| Variable                              | Default              | Controls                       |
-| ------------------------------------- | -------------------- | ------------------------------ |
-| `--rf-scrollbar-track-size`           | `12px`               | Track thickness                |
-| `--rf-scrollbar-track-color`          | `rgba(0,0,0,0.04)`   | Track background               |
-| `--rf-scrollbar-thumb-color`          | `rgba(0,0,0,0.35)`   | Thumb fill                     |
-| `--rf-scrollbar-thumb-color-hover`    | `rgba(0,0,0,0.5)`    | Thumb fill on hover            |
-| `--rf-scrollbar-radius`               | `6px`                | Thumb corner radius            |
+| Variable                              | Default                     | Controls                       |
+| ------------------------------------- | --------------------------- | ------------------------------ |
+| `--rf-scrollbar-track-size`           | `8px`                       | Track thickness                |
+| `--rf-scrollbar-hit-size`             | `--rf-scrollbar-track-size` | Thumb grab area (touch)        |
+| `--rf-scrollbar-track-color`          | `rgba(0,0,0,0.04)`          | Track background               |
+| `--rf-scrollbar-thumb-color`          | `rgba(0,0,0,0.35)`          | Thumb fill                     |
+| `--rf-scrollbar-thumb-color-hover`    | `rgba(0,0,0,0.5)`           | Thumb fill on hover            |
+| `--rf-scrollbar-radius`               | `6px`                       | Thumb corner radius            |
+
+**Dark mode ships automatically.** When a `.dark` ancestor is present (the Tailwind / shadcn /
+next-themes convention) the bars switch to white-translucent — no configuration needed. On coarse
+(touch) pointers the thumb grab area widens to ~24px (`--rf-scrollbar-hit-size`) while the bar stays
+thin. Override any variable to customize either palette:
 
 ```css
-/* A darker theme, applied globally. */
-.react-flow-scrollbars {
-  --rf-scrollbar-track-color: rgba(255, 255, 255, 0.06);
+/* Customize the dark palette (already applied automatically under `.dark`). */
+.dark .react-flow-scrollbars {
   --rf-scrollbar-thumb-color: rgba(255, 255, 255, 0.4);
-  --rf-scrollbar-thumb-color-hover: rgba(255, 255, 255, 0.6);
 }
 ```
 

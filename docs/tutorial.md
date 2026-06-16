@@ -221,8 +221,9 @@ that's expected.
 
 ## Step 6 — Make it your own (optional)
 
-The default theme is grayscale CSS variables on the `.react-flow-scrollbars` root.
-Recolor it for a dark canvas by adding this CSS anywhere in your app:
+The default theme is grayscale CSS variables on the `.react-flow-scrollbars` root — and dark
+mode is already automatic under a `.dark` ancestor (the Tailwind / shadcn / next-themes
+convention). To recolor it yourself, override the variables anywhere in your app:
 
 ```css
 .react-flow-scrollbars {

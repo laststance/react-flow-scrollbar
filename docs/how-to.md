@@ -70,13 +70,15 @@ The static look is plain CSS variables on the `.react-flow-scrollbars` root. (Pe
 geometry is applied inline and is not themeable — see the
 [theming reference](./reference.md#theming-reference) for the full variable list.)
 
-**A dark theme, applied globally:**
+**Dark mode is automatic.** When a `.dark` ancestor is present (the Tailwind / shadcn /
+next-themes class convention) the bars ship white-translucent with no configuration. Override the
+`.dark` rule to customize that palette, or set the variables on `.react-flow-scrollbars` directly to
+force a dark look regardless of theme class:
 
 ```css
-.react-flow-scrollbars {
-  --rf-scrollbar-track-color: rgba(255, 255, 255, 0.06);
+/* Customize the automatic dark palette (or force it without a `.dark` ancestor). */
+.dark .react-flow-scrollbars {
   --rf-scrollbar-thumb-color: rgba(255, 255, 255, 0.4);
-  --rf-scrollbar-thumb-color-hover: rgba(255, 255, 255, 0.6);
 }
 ```
 
@@ -99,7 +101,8 @@ geometry is applied inline and is not themeable — see the
 > To change the **track thickness**, set the `trackSize` option on the hook
 > (`useBoundedReactFlowViewport({ trackSize: 16 })`) rather than only the
 > `--rf-scrollbar-track-size` variable — the option keeps the hit-geometry in sync with
-> the visual size.
+> the visual size. On touch (coarse pointers) the thumb's grab area widens automatically
+> so a thin bar stays tappable.
 
 ---
 
@@ -167,7 +170,7 @@ const metrics = getReactFlowScrollMetrics({
   containerWidth: 1280,
   containerHeight: 576,
   reactFlowViewport: { x: 0, y: 0, zoom: 1 },
-  scrollbarTrackSize: 12,
+  scrollbarTrackSize: 8,
   minThumbSize: 32,
 })
 ```
