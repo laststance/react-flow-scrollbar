@@ -83,7 +83,7 @@ the programmatic-scroll methods from it. (See [why a single controller](./explan
 | -------------- | ---------- | -------------------- | ----------- |
 | `nodes`        | `Node[]`   | the store nodes (`useNodes()`) | Nodes whose bounds define the scroll area. Pass your own controlled array for the most robust first-render bounds; omit it to track the store. Hidden nodes (`node.hidden`) are ignored either way. |
 | `margin`       | `number`   | `30`                 | Content-edge inset in **flow coordinates** — breathing room around the outermost nodes. |
-| `trackSize`    | `number`   | `12`                 | Scrollbar track thickness in **px**. Echoed back on the controller so the component renders the track at exactly this size and the geometry matches. |
+| `trackSize`    | `number`   | `8`                  | Scrollbar track thickness in **px**. Echoed back on the controller so the component renders the track at exactly this size and the geometry matches. |
 | `minThumbSize` | `number`   | `32`                 | Minimum thumb length in **px**, so the thumb stays grabbable on huge canvases. |
 
 ### Returns — `BoundedReactFlowViewportController`
@@ -192,7 +192,7 @@ const metrics = getReactFlowScrollMetrics({
   containerWidth: 800,
   containerHeight: 600,
   reactFlowViewport: { x: -100, y: -50, zoom: 1 },
-  scrollbarTrackSize: 12,
+  scrollbarTrackSize: 8,
   minThumbSize: 32,
 })
 // → { content: { contentMinX, contentMinY, scrollRangeX, scrollRangeY },
@@ -411,7 +411,7 @@ them.
 | Constant                              | Value | Meaning |
 | ------------------------------------- | ----- | ------- |
 | `DEFAULT_SCROLL_AREA_MARGIN_PX`       | `30`  | Default `margin` — inset (in flow coords) between the outermost nodes and the scroll-area edge. |
-| `DEFAULT_SCROLLBAR_TRACK_SIZE_PX`     | `12`  | Default `trackSize` — thickness (px) of both tracks. |
+| `DEFAULT_SCROLLBAR_TRACK_SIZE_PX`     | `8`   | Default `trackSize` — thickness (px) of both tracks. |
 | `DEFAULT_SCROLLBAR_MIN_THUMB_SIZE_PX` | `32`  | Default `minThumbSize` — minimum thumb length (px) so a tiny proportional thumb stays grabbable. |
 
 ---
@@ -426,17 +426,24 @@ variables with your own CSS rule, the `className` / `style` props, or per-axis
 
 ### CSS variables
 
-| Variable                              | Default              | Controls            |
-| ------------------------------------- | -------------------- | ------------------- |
-| `--rf-scrollbar-track-size`           | `12px`               | Track thickness     |
-| `--rf-scrollbar-track-color`          | `rgba(0,0,0,0.04)`   | Track background    |
-| `--rf-scrollbar-thumb-color`          | `rgba(0,0,0,0.35)`   | Thumb fill          |
-| `--rf-scrollbar-thumb-color-hover`    | `rgba(0,0,0,0.5)`    | Thumb fill on hover |
-| `--rf-scrollbar-radius`               | `6px`                | Thumb corner radius |
+| Variable                              | Default                     | Controls                |
+| ------------------------------------- | --------------------------- | ----------------------- |
+| `--rf-scrollbar-track-size`           | `8px`                       | Track thickness         |
+| `--rf-scrollbar-hit-size`             | `--rf-scrollbar-track-size` | Thumb grab area (touch) |
+| `--rf-scrollbar-track-color`          | `rgba(0,0,0,0.04)`          | Track background        |
+| `--rf-scrollbar-thumb-color`          | `rgba(0,0,0,0.35)`          | Thumb fill              |
+| `--rf-scrollbar-thumb-color-hover`    | `rgba(0,0,0,0.5)`           | Thumb fill on hover     |
+| `--rf-scrollbar-radius`               | `6px`                       | Thumb corner radius     |
 
 > `--rf-scrollbar-track-size` is also written inline from the controller's `trackSize`,
 > so set the bar thickness via the `trackSize` **option** (which keeps the hit-geometry
 > in sync) rather than overriding this variable alone.
+
+**Dark mode** is automatic: a `.dark` ancestor (the Tailwind / shadcn / next-themes class
+convention) switches the bars to white-translucent — no configuration needed. **Touch:** on
+coarse pointers `--rf-scrollbar-hit-size` widens to `max(track-size, 24px)` so a thin thumb stays
+grabbable while the visible bar stays thin. The track's own click-to-jump target stays at the
+visible thickness on purpose — widening it would block canvas panning along the whole edge.
 
 ### Stable selectors
 

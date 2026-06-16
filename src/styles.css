@@ -9,7 +9,10 @@
  */
 
 .react-flow-scrollbars {
-  --rf-scrollbar-track-size: 12px;
+  --rf-scrollbar-track-size: 8px;
+  /* Pointer hit area for the thumb. Equals the visible thickness on fine pointers (a no-op);
+     widened on coarse/touch pointers below so a thin bar stays grabbable. Override to taste. */
+  --rf-scrollbar-hit-size: var(--rf-scrollbar-track-size);
   --rf-scrollbar-track-color: rgba(0, 0, 0, 0.04);
   --rf-scrollbar-thumb-color: rgba(0, 0, 0, 0.35);
   --rf-scrollbar-thumb-color-hover: rgba(0, 0, 0, 0.5);
@@ -20,6 +23,18 @@
   inset: 0;
   pointer-events: none;
   z-index: 5;
+}
+
+/*
+ * Dark theme: when a `.dark` ancestor is present (the Tailwind / shadcn / next-themes class
+ * convention) swap the black-translucent bars for white-translucent. The light values above
+ * already serve light mode — only the dark set is added here. Prefer OS-level
+ * `prefers-color-scheme`? Copy these three variables into your own `@media` query instead.
+ */
+.dark .react-flow-scrollbars {
+  --rf-scrollbar-track-color: rgba(255, 255, 255, 0.04);
+  --rf-scrollbar-thumb-color: rgba(255, 255, 255, 0.28);
+  --rf-scrollbar-thumb-color-hover: rgba(255, 255, 255, 0.45);
 }
 
 .react-flow-scrollbars__track {
@@ -64,4 +79,46 @@
 .react-flow-scrollbars__thumb[data-axis='y'] {
   left: 1px;
   width: calc(var(--rf-scrollbar-track-size) - 2px);
+}
+
+/*
+ * Touch grab area: an invisible pad over the thumb, sized by `--rf-scrollbar-hit-size` and
+ * extended inward from the screen edge so a thin bar clears the coarse-pointer touch-target
+ * guidance. A pointerdown on the pad dispatches against the thumb itself (a pseudo-element is
+ * not a separate event target), so the existing drag handler fires unchanged — and the drag
+ * math is delta-based, so it never matters *where* on the thumb the grab landed. The pad
+ * inherits `pointer-events: auto` from the thumb; `touch-action: none` is repeated so a touch
+ * landing on the pad never scrolls/zooms the page. On fine pointers the pad equals the visible
+ * thickness, so it is effectively a no-op there.
+ */
+.react-flow-scrollbars__thumb::before {
+  content: '';
+  position: absolute;
+  touch-action: none;
+}
+
+.react-flow-scrollbars__thumb[data-axis='x']::before {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--rf-scrollbar-hit-size);
+}
+
+.react-flow-scrollbars__thumb[data-axis='y']::before {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: var(--rf-scrollbar-hit-size);
+}
+
+/*
+ * Coarse (touch) pointers: widen the thumb grab area to ~24px while keeping the thin visible
+ * bar. `max()` guarantees the hit area is never narrower than the visible thumb, even when a
+ * consumer sets a thick `trackSize`. The track's own click-to-jump target stays at the visible
+ * thickness on purpose — widening it would block canvas panning along the whole edge.
+ */
+@media (pointer: coarse) {
+  .react-flow-scrollbars {
+    --rf-scrollbar-hit-size: max(var(--rf-scrollbar-track-size), 24px);
+  }
 }
