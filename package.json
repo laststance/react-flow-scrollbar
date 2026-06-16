@@ -1,6 +1,6 @@
 {
   "name": "react-flow-scrollbar",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Custom, viewport-synced scrollbars and bounded panning (translateExtent) for React Flow / @xyflow/react v12.",
   "keywords": [
     "react-flow",
