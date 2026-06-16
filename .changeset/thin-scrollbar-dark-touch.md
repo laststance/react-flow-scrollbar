@@ -14,8 +14,8 @@ Thinner default scrollbars, automatic dark mode, and a touch-friendly grab area.
   rule to customize the dark palette.
 - **Touch-friendly grab area.** A new `--rf-scrollbar-hit-size` variable controls the thumb's pointer
   hit area. On coarse (touch) pointers it widens to `max(track-size, 24px)` so the thin 8px bar stays
-  grabbable while the visible bar stays thin; fine-pointer behavior is unchanged. Pure-CSS change (a
-  thumb `::before` pad) — the drag handler is untouched.
+  grabbable while the visible bar stays thin; on fine (mouse) pointers the hit area stays at the track
+  size. Pure-CSS change (a thumb `::before` pad) — the drag handler is untouched.
 
 Notes: the 24px touch target is a deliberate *mitigation*, not full 44px compliance — it keeps the
 canvas dead-zone small, and the track's click-to-jump target stays at the visible thickness. Dark

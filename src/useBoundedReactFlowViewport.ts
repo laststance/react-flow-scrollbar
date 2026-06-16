@@ -30,7 +30,7 @@ export type UseBoundedReactFlowViewportOptions = {
   nodes?: Node[];
   /** Content-edge inset in flow coordinates. Default 30. */
   margin?: number;
-  /** Scrollbar track thickness in px. Default 12. */
+  /** Scrollbar track thickness in px. Default 8. */
   trackSize?: number;
   /** Minimum thumb length in px. Default 32. */
   minThumbSize?: number;
