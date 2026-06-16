@@ -21,6 +21,18 @@ npm install react-flow-scrollbar
 > **Peer dependencies:** `@xyflow/react >=12` and `react ^18 || ^19`. They are not bundled —
 > you already have them in a React Flow app.
 
+## Documentation
+
+Full docs live in [`docs/`](./docs), organized by the [Diátaxis](https://diataxis.fr/)
+framework:
+
+- 📘 **[Tutorial](./docs/tutorial.md)** — from an empty canvas to working scrollbars in six steps.
+- 🛠️ **[How-to guides](./docs/how-to.md)** — recipes: programmatic scroll, theming, focus a node, test the bars.
+- 📑 **[Reference](./docs/reference.md)** — the canonical, exhaustive API: every export, type, default, CSS variable.
+- 💡 **[Explanation](./docs/explanation.md)** — why a single controller, how the zoom-aware pan-clamp works.
+
+The sections below are a quick-start summary; the docs are the source of truth.
+
 ## Features
 
 - 🖱️ **Draggable thumbs** — grab and drag, exactly like a native scrollbar.
@@ -85,7 +97,8 @@ export default function App() {
 ```
 
 That's it — both bars appear as soon as the content overflows the pane (React Flow measures
-unsized nodes asynchronously; the bars wait for that and then show).
+unsized nodes asynchronously; the bars wait for that and then show). For a step-by-step
+walkthrough, see the **[Tutorial](./docs/tutorial.md)**.
 
 ## Why a controller?
 
@@ -94,9 +107,13 @@ The scrollbars, the pan-clamp (`translateExtent`), and "focus this node" all der
 thing, the clamp does another, and panning snaps. So a single controller hook —
 `useBoundedReactFlowViewport` — owns the bounds and is the source of truth. You pass its
 `translateExtent` to `<ReactFlow>` and hand the whole controller to `<ReactFlowScrollbars>`.
-One calculation, one truth, no drift.
+One calculation, one truth, no drift. → [Explanation](./docs/explanation.md#why-a-single-controller).
 
 ## API
+
+> This is a condensed summary of the two main exports. The **canonical, exhaustive API** —
+> including the four pure helpers, every type, the default constants, and the development
+> warnings — lives in **[docs/reference.md](./docs/reference.md)**.
 
 ### `useBoundedReactFlowViewport(options?)`
 
@@ -157,6 +174,11 @@ import {
 } from 'react-flow-scrollbar';
 ```
 
+Each helper takes an optional `getBounds` seam; **pass `useReactFlow().getNodesBounds` if your
+graph has subflows**, or nested nodes resolve to the wrong place. Full signatures →
+[reference](./docs/reference.md#pure-helpers); a worked focus/standalone recipe →
+[how-to](./docs/how-to.md#use-the-math-without-the-hook).
+
 ## Theming
 
 The static look — colors, radius, track thickness — is plain CSS variables on the
@@ -189,6 +211,9 @@ Or inline per instance, since CSS variables are valid `style` values:
   style={{ '--rf-scrollbar-thumb-color': '#6366f1' } as React.CSSProperties}
 />
 ```
+
+More theming recipes (per-axis, inline) → [how-to](./docs/how-to.md#theming); the full variable
+and selector tables → [reference](./docs/reference.md#theming-reference).
 
 ### Stable selectors
 
@@ -225,6 +250,9 @@ const controller = useBoundedReactFlowViewport({ nodes });
 const controller = useBoundedReactFlowViewport({ nodes, margin: 120 });
 ```
 
+More recipes — focus a node, use the math without the hook, target the bars in tests →
+**[How-to guides](./docs/how-to.md)**.
+
 ## How bounded panning works
 
 `translateExtent` tells React Flow how far the canvas may pan. This package computes it in
@@ -237,6 +265,8 @@ every zoom frame.
 
 You don't have to think about any of this — just wire `controller.translateExtent` onto
 `<ReactFlow>`. It's documented here because it's the part most hand-rolled scrollbars get wrong.
+→ Full derivation, the referential-stability memo, and the rest of the design rationale:
+**[Explanation](./docs/explanation.md#how-bounded-panning-works)**.
 
 ## Example
 
