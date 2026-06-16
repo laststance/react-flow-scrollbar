@@ -2,6 +2,10 @@
 
 import dynamic from 'next/dynamic';
 
+// Must equal the pane height in QuickStart.tsx (`height: 480`). Deliberately a separate literal, not
+// imported from the shown demo file: that file is displayed verbatim as a copy-paste example and
+// must stay library-focused, free of website lazy-loading plumbing. This placeholder only needs to
+// reserve the same vertical space so swapping it for the real demo causes no layout shift.
 const DEMO_HEIGHT_PX = 480;
 
 // React Flow measures DOM and uses browser-only APIs, so it must not server-render. `ssr: false`
