@@ -1,0 +1,32 @@
+{
+  "name": "website",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prebuild": "pnpm --filter react-flow-scrollbar build",
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start",
+    "postinstall": "fumadocs-mdx"
+  },
+  "dependencies": {
+    "react-flow-scrollbar": "workspace:*",
+    "@xyflow/react": "12.10.2",
+    "fumadocs-core": "16.10.3",
+    "fumadocs-mdx": "15.0.12",
+    "fumadocs-ui": "16.10.3",
+    "next": "16.2.9",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.1",
+    "@types/mdx": "^2.0.13",
+    "@types/node": "22.10.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.2",
+    "tailwindcss": "4.3.1",
+    "typescript": "5.7.2"
+  }
+}

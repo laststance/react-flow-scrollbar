@@ -11,4 +11,6 @@ test-results
 playwright-report
 blob-report
 .turbo
+.vercel
 CLAUDE.md
+.env*.local

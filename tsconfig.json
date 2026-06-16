@@ -20,5 +20,5 @@
     "types": ["vitest/globals", "node"]
   },
   "include": ["src", "tsup.config.ts", "vitest.config.ts"],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "node_modules", "website"]
 }

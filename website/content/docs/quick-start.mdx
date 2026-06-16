@@ -1,0 +1,28 @@
+---
+title: Quick Start
+description: A live React Flow canvas with viewport-synced scrollbars, shown beside the exact source that runs it.
+---
+
+import { QuickStartDemo } from '@/components/QuickStartDemo';
+
+`useBoundedReactFlowViewport` reads the React Flow store (it calls hooks like `useReactFlow`
+internally), so the component that calls it **must live under a `<ReactFlowProvider>`**. Wire the
+controller's `translateExtent` onto `<ReactFlow>`, and drop `<ReactFlowScrollbars>` in as a child.
+
+The demo below is a real, running component — **the code shown underneath it is the exact file that
+renders it.** Drag a scrollbar, or pan/zoom the canvas, and watch them stay in sync.
+
+<QuickStartDemo />
+
+## How it fits together
+
+1. **One controller, one truth.** `useBoundedReactFlowViewport({ nodes })` owns the node bounds.
+   Both the scrollbar metrics and the `translateExtent` pan-clamp derive from that single read, so
+   the bars and the clamp can never disagree.
+2. **`translateExtent` is required.** Without it the scrollbars still render, but panning snaps back
+   to center because nothing clamps the canvas to its content bounds.
+3. **The bars appear once content overflows.** React Flow measures unsized nodes asynchronously; the
+   scrollbars wait for that measurement, then show on whichever axis overflows.
+
+For programmatic scrolling, single-axis setups, theming, and focusing a node, see the **Advanced
+guide** (coming soon) and the full **API reference**.
