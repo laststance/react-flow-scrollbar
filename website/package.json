@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "react-flow-scrollbar": "workspace:*",
-    "@xyflow/react": "12.10.2",
+    "@xyflow/react": "12.11.1",
     "fumadocs-core": "16.10.3",
     "fumadocs-mdx": "15.0.12",
     "fumadocs-ui": "16.10.3",
