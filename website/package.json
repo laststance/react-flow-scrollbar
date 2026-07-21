@@ -14,7 +14,7 @@
     "react-flow-scrollbar": "workspace:*",
     "@xyflow/react": "12.11.2",
     "fumadocs-core": "16.10.7",
-    "fumadocs-mdx": "15.0.13",
+    "fumadocs-mdx": "15.1.1",
     "fumadocs-ui": "16.11.0",
     "next": "16.2.9",
     "react": "19.2.6",
