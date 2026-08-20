@@ -23,7 +23,7 @@ npm install react-flow-scrollbar
 
 ## Documentation
 
-Full docs live in https://react-flow-scrollbar-docs.vercel.app, organized by the [Diátaxis](https://diataxis.fr/)
+Full docs live in https://react-flow-scrollbar-docs.vercel.app
 framework:
 
 - 📘 **[Tutorial](./docs/tutorial.md)** — from an empty canvas to working scrollbars in six steps.
