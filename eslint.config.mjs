@@ -13,10 +13,10 @@ export default tseslint.config(
     files: ['**/*.{ts,tsx}'],
     plugins: { 'react-hooks': reactHooks },
     rules: {
-      ...reactHooks.configs.recommended.rules,
-      // exhaustive-deps cannot reason about external mutable stores (React Flow's nodeLookup), so it
-      // false-flags our deliberate recompute triggers as "unnecessary". Keep rules-of-hooks (catches
-      // real conditional-hook bugs); turn this one off — deps are hand-audited in this hook-heavy lib.
+      // v7 `recommended` also turns on React Compiler rules; those flag the overlay's intentional
+      // render-time ref writes (`controllerRef.current = controller`). Keep the original surface:
+      // rules-of-hooks on, exhaustive-deps off (it cannot reason about React Flow's nodeLookup).
+      'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
