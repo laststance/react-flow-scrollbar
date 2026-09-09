@@ -24,7 +24,7 @@ describe('getReactFlowScrollMetrics', () => {
     },
   ];
 
-  it('shows both horizontal and vertical scrollbars when content exceeds the container', () => {
+  test('shows both horizontal and vertical scrollbars when content exceeds the container', () => {
     // Arrange
     const reactFlowViewport = { x: -70, y: -170, zoom: 1 };
 
@@ -47,7 +47,7 @@ describe('getReactFlowScrollMetrics', () => {
     expect(metrics.vertical.thumbSizePx).toBeGreaterThanOrEqual(32);
   });
 
-  it('hides the scrollbars when every node fits inside the container', () => {
+  test('hides the scrollbars when every node fits inside the container', () => {
     // Arrange
     const reactFlowViewport = { x: -70, y: -170, zoom: 1 };
 
@@ -67,7 +67,7 @@ describe('getReactFlowScrollMetrics', () => {
     expect(metrics.vertical.isVisible).toBe(false);
   });
 
-  it('maps scroll ratios back to React Flow viewport coordinates', () => {
+  test('maps scroll ratios back to React Flow viewport coordinates', () => {
     // Arrange
     const reactFlowViewport = { x: -70, y: -170, zoom: 1 };
     const metrics = getReactFlowScrollMetrics({
@@ -98,7 +98,7 @@ describe('getReactFlowScrollMetrics', () => {
     expect(nextReactFlowViewport.zoom).toBe(1);
   });
 
-  it('shows only the vertical scrollbar when content overflows vertically but fits horizontally', () => {
+  test('shows only the vertical scrollbar when content overflows vertically but fits horizontally', () => {
     // Arrange
     const reactFlowViewport = { x: -70, y: -170, zoom: 1 };
 
@@ -122,7 +122,7 @@ describe('getReactFlowScrollMetrics', () => {
     expect(metrics.horizontal.thumbSizePx).toBe(688);
   });
 
-  it('clamps out-of-range scroll ratios to the content edges', () => {
+  test('clamps out-of-range scroll ratios to the content edges', () => {
     // Arrange
     const reactFlowViewport = { x: -70, y: -170, zoom: 1 };
     const metrics = getReactFlowScrollMetrics({
@@ -150,7 +150,7 @@ describe('getReactFlowScrollMetrics', () => {
     expect(nextReactFlowViewport.y).toBe(-170);
   });
 
-  it('accounts for zoom when computing the scroll range and viewport coordinates', () => {
+  test('accounts for zoom when computing the scroll range and viewport coordinates', () => {
     // Arrange
     const reactFlowViewport = { x: -140, y: -340, zoom: 2 };
 
@@ -183,7 +183,7 @@ describe('getReactFlowScrollMetrics', () => {
     expect(nextReactFlowViewport.zoom).toBe(2);
   });
 
-  it('applies the minimum thumb size when content vastly exceeds the container', () => {
+  test('applies the minimum thumb size when content vastly exceeds the container', () => {
     // Arrange
     const farApartNodes: Node[] = [
       { id: 'a', position: { x: 0, y: 0 }, data: {}, width: 200, height: 200 },
@@ -214,7 +214,7 @@ describe('getReactFlowScrollMetrics', () => {
     expect(metrics.vertical.thumbSizePx).toBe(32);
   });
 
-  it('returns no scrollable content when there are no nodes', () => {
+  test('returns no scrollable content when there are no nodes', () => {
     // Arrange
     const reactFlowViewport = { x: 0, y: 0, zoom: 1 };
 
@@ -246,7 +246,7 @@ describe('getReactFlowTranslateExtent', () => {
     { id: 'b', position: { x: 300, y: 50 }, data: {}, width: 200, height: 100 },
   ];
 
-  it('pads the extent to the viewport size when content is smaller, preventing the centering snap on pan', () => {
+  test('pads the extent to the viewport size when content is smaller, preventing the centering snap on pan', () => {
     // Arrange
     // content 500x150 fits inside container 1280x576 (both axes fit)
 
@@ -270,7 +270,7 @@ describe('getReactFlowTranslateExtent', () => {
     expect(extent![1][1] - extent![0][1]).toBe(576);
   });
 
-  it('keeps the extent at the content edge + margin when content is larger, preserving the scroll range', () => {
+  test('keeps the extent at the content edge + margin when content is larger, preserving the scroll range', () => {
     // Arrange
     // content 500x150 exceeds container 300x100 (both axes scroll)
 
@@ -290,7 +290,7 @@ describe('getReactFlowTranslateExtent', () => {
     ]);
   });
 
-  it('does not collapse the extent when the container is unmeasured (0), falling back to the content edge + margin', () => {
+  test('does not collapse the extent when the container is unmeasured (0), falling back to the content edge + margin', () => {
     // Arrange
     // simulates the transient 0 before useMeasure initializes
 
@@ -310,7 +310,7 @@ describe('getReactFlowTranslateExtent', () => {
     ]);
   });
 
-  it('returns no extent when there are no nodes', () => {
+  test('returns no extent when there are no nodes', () => {
     // Arrange & Act
     const extent = getReactFlowTranslateExtent({
       nodes: [],
@@ -323,7 +323,7 @@ describe('getReactFlowTranslateExtent', () => {
     expect(extent).toBeUndefined();
   });
 
-  it('pads to the visible world (containerSize / zoom) at zoom != 1 so panning still edge-clamps instead of centering', () => {
+  test('pads to the visible world (containerSize / zoom) at zoom != 1 so panning still edge-clamps instead of centering', () => {
     // Arrange
     // content 500x150 fits inside the visible world 640x288 (= 1280x576 / 2) at zoom 2
 
@@ -348,7 +348,7 @@ describe('getReactFlowTranslateExtent', () => {
     expect(extent![1][1] - extent![0][1]).toBe(288);
   });
 
-  it('keeps the extent at the content edge at zoom != 1 when content exceeds the visible world (identical to zoom 1)', () => {
+  test('keeps the extent at the content edge at zoom != 1 when content exceeds the visible world (identical to zoom 1)', () => {
     // Arrange
     // content 500x150 exceeds the visible world 150x50 (= 300x100 / 2) at zoom 2
 
@@ -371,7 +371,7 @@ describe('getReactFlowTranslateExtent', () => {
 });
 
 describe('getReactFlowFocusViewport', () => {
-  it('top-left-pins (not centers) a target when the tree fits the viewport, so the first scroll after focus does not snap', () => {
+  test('top-left-pins (not centers) a target when the tree fits the viewport, so the first scroll after focus does not snap', () => {
     // Arrange
     // content 500x150 fits inside container 1280x576. Centering target b would give
     // worldLeft=-240/worldTop=-188, but it should clamp to top-left.
@@ -401,7 +401,7 @@ describe('getReactFlowFocusViewport', () => {
     expect(viewport).toEqual({ x: 30, y: 30, zoom: 1 });
   });
 
-  it('centers a target within the scroll range when the tree is larger than the viewport', () => {
+  test('centers a target within the scroll range when the tree is larger than the viewport', () => {
     // Arrange
     // content 2200x1600 exceeds container 1000x800. The middle target b fits the range and is centered.
     const nodes: Node[] = [
@@ -437,7 +437,7 @@ describe('getReactFlowFocusViewport', () => {
     expect(viewport).toEqual({ x: -600, y: -350, zoom: 1 });
   });
 
-  it('prefers measured dimensions over width/height when computing the target center', () => {
+  test('prefers measured dimensions over width/height when computing the target center', () => {
     // Arrange
     // target b has measured 400x300 differing from width/height 200x100. The real getNodes() returns
     // measured-aware nodes, so the center should use measured. The farthest node c dominates bounds,
@@ -477,7 +477,7 @@ describe('getReactFlowFocusViewport', () => {
     expect(viewport).toEqual({ x: -700, y: -450, zoom: 1 });
   });
 
-  it('clamps the center placement to the upper bound of the scroll range for an edge target', () => {
+  test('clamps the center placement to the upper bound of the scroll range for an edge target', () => {
     // Arrange
     // Centering the farthest node c would push desiredWorld past the scroll range, so it clamps to the bottom-right.
     const nodes: Node[] = [
@@ -514,7 +514,7 @@ describe('getReactFlowFocusViewport', () => {
     expect(viewport).toEqual({ x: -1230, y: -830, zoom: 1 });
   });
 
-  it('top-left-pins the horizontal axis and centers the vertical axis when one fits and the other overflows', () => {
+  test('top-left-pins the horizontal axis and centers the vertical axis when one fits and the other overflows', () => {
     // Arrange
     // content width 400 fits container 1000 (horizontal fit→top-left), content height 1600 exceeds 800 (vertical scroll)
     const nodes: Node[] = [
@@ -551,7 +551,7 @@ describe('getReactFlowFocusViewport', () => {
     expect(viewport).toEqual({ x: 30, y: -450, zoom: 1 });
   });
 
-  it('align=topLeft pins the node top-left + margin when the topmost node is the content top edge (no-op on a uniform-height tree)', () => {
+  test('align=topLeft pins the node top-left + margin when the topmost node is the content top edge (no-op on a uniform-height tree)', () => {
     // Arrange
     // uniform-height tree: topmost node a (y=0) is the content top edge; b is also y=0, nothing above a
     const nodes: Node[] = [
@@ -575,7 +575,7 @@ describe('getReactFlowFocusViewport', () => {
     expect(viewport).toEqual({ x: 30, y: 30, zoom: 1 });
   });
 
-  it('align=topLeft clamps to the content top edge when a taller sibling sits above the topmost node and the tree fits, avoiding the post-focus snap', () => {
+  test('align=topLeft clamps to the content top edge when a taller sibling sits above the topmost node and the tree fits, avoiding the post-focus snap', () => {
     // Arrange
     // variable-height tree: a taller sort-0 child of root (y=0) is placed above root (y=-120) by height
     // compensation, so root is NOT the content top edge. content 500x220 fits container 1280x576 (both fit).
@@ -613,7 +613,7 @@ describe('getReactFlowFocusViewport', () => {
     expect(viewport).toEqual({ x: 30, y: 150, zoom: 1 });
   });
 
-  it('align=topLeft pins the topmost node to the content top edge (scroll-range origin) when the tree is larger than the viewport', () => {
+  test('align=topLeft pins the topmost node to the content top edge (scroll-range origin) when the tree is larger than the viewport', () => {
     // Arrange
     // vertically large tree: root (y=0) is the content top edge. content 200x2100 exceeds container height 576.
     const nodes: Node[] = [
@@ -649,7 +649,7 @@ describe('getReactFlowFocusViewport', () => {
     expect(viewport).toEqual({ x: 30, y: 30, zoom: 1 });
   });
 
-  it('returns no viewport when there are no nodes', () => {
+  test('returns no viewport when there are no nodes', () => {
     // Arrange
     const targetNode: Node = {
       id: 'a',
@@ -673,7 +673,7 @@ describe('getReactFlowFocusViewport', () => {
     expect(viewport).toBeUndefined();
   });
 
-  it('returns no viewport when the container is unmeasured (width 0), deferring to the caller fallback', () => {
+  test('returns no viewport when the container is unmeasured (width 0), deferring to the caller fallback', () => {
     // Arrange
     // before useMeasure initializes, containerWidth is 0; the focus caller sees undefined and falls back to a direct viewport
     const targetNode: Node = {
