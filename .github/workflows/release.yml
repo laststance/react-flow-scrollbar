@@ -19,8 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Actions are pinned to a commit SHA, not a moving tag: a tag like @v6 can be repointed at malicious
-      # code (a tag-hijack supply-chain attack); a SHA cannot. Dependabot (.github/dependabot.yml) keeps the
-      # pins current.
+      # code (a tag-hijack supply-chain attack); a SHA cannot.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0 # full history so release-it can create the tag + generate release notes
