@@ -33,7 +33,14 @@ const prependUseClient = (jsPath: string, mapPath: string): void => {
 export default defineConfig({
   entry: ['src/index.ts'],
   format: ['esm', 'cjs'],
-  dts: true,
+  // tsup 8.5 injects `baseUrl: '.'` into the DTS worker (egoist/tsup#1388). TS 6 treats that
+  // option as deprecated (TS5101) even when our tsconfig never set it. Silence only the DTS pass —
+  // drop this when tsup stops injecting baseUrl, or when the bundler is replaced.
+  dts: {
+    compilerOptions: {
+      ignoreDeprecations: '6.0',
+    },
+  },
   sourcemap: true,
   clean: true,
   treeshake: true,
