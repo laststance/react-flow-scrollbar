@@ -291,3 +291,10 @@ pnpm example:dev   # → http://127.0.0.1:5173
 ## License
 
 [MIT](./LICENSE) © [Laststance.io](https://github.com/laststance)
+
+### Documentation deployment
+
+The Vercel project `react-flow-scrollbar-docs` builds the documentation app from
+`website`. Set its Root Directory to `website` and keep access to files outside
+that directory enabled so pnpm can resolve the workspace library. The repository
+root contains the published library and does not have a Next.js dependency.
