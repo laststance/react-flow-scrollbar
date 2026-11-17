@@ -2,7 +2,7 @@ import {
   useNodes,
   useNodesInitialized,
   useReactFlow,
-  useStore,
+  useViewportStore,
   useViewport,
 } from '@xyflow/react';
 import type { CoordinateExtent, Node, Viewport } from '@xyflow/react';
@@ -115,9 +115,9 @@ export const useBoundedReactFlowViewport = (
 
   const reactFlowViewport = useViewport();
   const zoom = reactFlowViewport.zoom;
-  // ISSUE-1: container dims come from the RF store (auto-tracks resize), not from props.
-  const containerWidth = useStore((state) => state.width);
-  const containerHeight = useStore((state) => state.height);
+  // React Flow 13 keeps measured container dimensions in its viewport store.
+  const containerWidth = useViewportStore((state) => state.width);
+  const containerHeight = useViewportStore((state) => state.height);
 
   const { getNodesBounds: getNodesBoundsHook, setViewport } = useReactFlow();
 

@@ -1,4 +1,4 @@
-import { useStoreApi } from '@xyflow/react';
+import { useReactFlowStoreApi } from '@xyflow/react';
 import { useCallback, useEffect, useRef } from 'react';
 import type {
   CSSProperties,
@@ -80,7 +80,7 @@ export const ReactFlowScrollbars = ({
 
   // OV-2: one frame after wiring, warn once if the live store extent is still infinite — i.e. the
   // caller passed a controller but forgot `translateExtent={controller.translateExtent}` (panning snaps).
-  const storeApi = useStoreApi();
+  const { optionsStore: storeApi } = useReactFlowStoreApi();
   const extentWarnedRef = useRef(false);
   const hasExtent = controller.translateExtent !== undefined;
   useEffect(() => {

@@ -5,7 +5,7 @@
 [![license](https://img.shields.io/npm/l/react-flow-scrollbar.svg)](./LICENSE)
 
 Custom, viewport-synced **scrollbars** and **bounded panning** (`translateExtent`) for
-[React Flow / @xyflow/react](https://reactflow.dev) **v12**.
+[React Flow / @xyflow/react](https://reactflow.dev) **v13**.
 
 React Flow ships a MiniMap, Controls, Background, and Panel — but **no scrollbar**. This
 package adds draggable, click-to-jump scrollbars that stay in two-way sync with the React
@@ -18,7 +18,7 @@ npm install react-flow-scrollbar
 # or: yarn add react-flow-scrollbar
 ```
 
-> **Peer dependencies:** `@xyflow/react >=12` and `react ^18 || ^19`. They are not bundled —
+> **Peer dependencies:** `@xyflow/react ^13` and `react ^18 || ^19`. They are not bundled —
 > you already have them in a React Flow app.
 
 ## Documentation
@@ -122,22 +122,22 @@ Returns a `BoundedReactFlowViewportController`. Call it inside a component under
 
 #### Options
 
-| Option         | Type     | Default | Description                                                                        |
-| -------------- | -------- | ------- | ---------------------------------------------------------------------------------- |
+| Option         | Type     | Default | Description                                                                                                                                                |
+| -------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `nodes`        | `Node[]` | store   | Nodes whose bounds define the scroll area. Defaults to the store nodes (`useNodes()`). Pass your controlled array for the most robust first-render bounds. |
-| `margin`       | `number` | `30`    | Content-edge inset in **flow coordinates** — breathing room around the outermost nodes. |
-| `trackSize`    | `number` | `8`     | Scrollbar track thickness in **px**. The component renders the track at this size so geometry matches. |
-| `minThumbSize` | `number` | `32`    | Minimum thumb length in **px**, so the thumb stays grabbable on huge canvases.      |
+| `margin`       | `number` | `30`    | Content-edge inset in **flow coordinates** — breathing room around the outermost nodes.                                                                    |
+| `trackSize`    | `number` | `8`     | Scrollbar track thickness in **px**. The component renders the track at this size so geometry matches.                                                     |
+| `minThumbSize` | `number` | `32`    | Minimum thumb length in **px**, so the thumb stays grabbable on huge canvases.                                                                             |
 
 #### Returns — `BoundedReactFlowViewportController`
 
-| Member            | Type                                                  | Description                                                                            |
-| ----------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `translateExtent` | `CoordinateExtent \| undefined`                       | Pass to `<ReactFlow translateExtent={...}>`. `undefined` when there's nothing to bound. |
-| `metrics`         | `ReactFlowScrollMetrics`                              | Current scrollbar geometry + scroll range, recomputed reactively.                       |
-| `trackSize`       | `number`                                              | The configured bar thickness (px), echoed back for the component.                       |
-| `scrollTo`        | `(ratios: { xRatio?: number; yRatio?: number }) => void` | Scroll to absolute ratios (`0..1`); an omitted axis keeps its position.              |
-| `scrollBy`        | `(delta: { x?: number; y?: number }) => void`         | Scroll by a flow-coordinate delta on either axis.                                       |
+| Member            | Type                                                     | Description                                                                             |
+| ----------------- | -------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `translateExtent` | `CoordinateExtent \| undefined`                          | Pass to `<ReactFlow translateExtent={...}>`. `undefined` when there's nothing to bound. |
+| `metrics`         | `ReactFlowScrollMetrics`                                 | Current scrollbar geometry + scroll range, recomputed reactively.                       |
+| `trackSize`       | `number`                                                 | The configured bar thickness (px), echoed back for the component.                       |
+| `scrollTo`        | `(ratios: { xRatio?: number; yRatio?: number }) => void` | Scroll to absolute ratios (`0..1`); an omitted axis keeps its position.                 |
+| `scrollBy`        | `(delta: { x?: number; y?: number }) => void`            | Scroll by a flow-coordinate delta on either axis.                                       |
 
 The viewport writes from `scrollTo` / `scrollBy` are coalesced into a single
 `requestAnimationFrame`, so the new transform lands a frame or two later — handy to know when
@@ -148,12 +148,12 @@ asserting on it in tests (use `expect.poll`).
 Renders the overlay with the bars. Returns `null` until there is something to scroll. Render
 it as a child of `<ReactFlow>`.
 
-| Prop          | Type                                       | Default  | Description                                                |
-| ------------- | ------------------------------------------ | -------- | --------------------------------------------------------- |
-| `controller`  | `BoundedReactFlowViewportController`       | —        | **Required.** The controller from the hook above.         |
-| `orientation` | `'both' \| 'horizontal' \| 'vertical'`     | `'both'` | Which bars to render.                                     |
-| `className`   | `string`                                   | —        | Extra class on the overlay root (e.g. for theming).       |
-| `style`       | `CSSProperties`                            | —        | Inline style merged onto the overlay root (CSS vars welcome). |
+| Prop          | Type                                   | Default  | Description                                                   |
+| ------------- | -------------------------------------- | -------- | ------------------------------------------------------------- |
+| `controller`  | `BoundedReactFlowViewportController`   | —        | **Required.** The controller from the hook above.             |
+| `orientation` | `'both' \| 'horizontal' \| 'vertical'` | `'both'` | Which bars to render.                                         |
+| `className`   | `string`                               | —        | Extra class on the overlay root (e.g. for theming).           |
+| `style`       | `CSSProperties`                        | —        | Inline style merged onto the overlay root (CSS vars welcome). |
 
 > **Dev warning:** if you pass a `controller` but forget `translateExtent={controller.translateExtent}`
 > on `<ReactFlow>`, the component logs a one-time console warning in development — panning would
@@ -186,14 +186,14 @@ The static look — colors, radius, track thickness — is plain CSS variables o
 inline by the component and is intentionally **not** themeable. Override the variables with your
 own rule, the `className` / `style` props, or per-axis `[data-axis]` selectors.
 
-| Variable                              | Default                     | Controls                       |
-| ------------------------------------- | --------------------------- | ------------------------------ |
-| `--rf-scrollbar-track-size`           | `8px`                       | Track thickness                |
-| `--rf-scrollbar-hit-size`             | `--rf-scrollbar-track-size` | Thumb grab area (touch)        |
-| `--rf-scrollbar-track-color`          | `rgba(0,0,0,0.04)`          | Track background               |
-| `--rf-scrollbar-thumb-color`          | `rgba(0,0,0,0.35)`          | Thumb fill                     |
-| `--rf-scrollbar-thumb-color-hover`    | `rgba(0,0,0,0.5)`           | Thumb fill on hover            |
-| `--rf-scrollbar-radius`               | `6px`                       | Thumb corner radius            |
+| Variable                           | Default                     | Controls                |
+| ---------------------------------- | --------------------------- | ----------------------- |
+| `--rf-scrollbar-track-size`        | `8px`                       | Track thickness         |
+| `--rf-scrollbar-hit-size`          | `--rf-scrollbar-track-size` | Thumb grab area (touch) |
+| `--rf-scrollbar-track-color`       | `rgba(0,0,0,0.04)`          | Track background        |
+| `--rf-scrollbar-thumb-color`       | `rgba(0,0,0,0.35)`          | Thumb fill              |
+| `--rf-scrollbar-thumb-color-hover` | `rgba(0,0,0,0.5)`           | Thumb fill on hover     |
+| `--rf-scrollbar-radius`            | `6px`                       | Thumb corner radius     |
 
 **Dark mode ships automatically.** When a `.dark` ancestor is present (the Tailwind / shadcn /
 next-themes convention) the bars switch to white-translucent — no configuration needed. On coarse
@@ -224,11 +224,11 @@ and selector tables → [reference](./docs/reference.md#theming-reference).
 For E2E tests or advanced styling, the component sets stable data-attributes you can target
 without depending on class names:
 
-| Selector                                          | Element                       |
-| ------------------------------------------------- | ----------------------------- |
-| `[data-rf-scrollbars]`                            | Overlay root                  |
-| `[data-rf-scrollbar-track][data-axis="x"\|"y"]`   | A track (horizontal/vertical) |
-| `[data-rf-scrollbar-thumb][data-axis="x"\|"y"]`   | A thumb (horizontal/vertical) |
+| Selector                                        | Element                       |
+| ----------------------------------------------- | ----------------------------- |
+| `[data-rf-scrollbars]`                          | Overlay root                  |
+| `[data-rf-scrollbar-track][data-axis="x"\|"y"]` | A track (horizontal/vertical) |
+| `[data-rf-scrollbar-thumb][data-axis="x"\|"y"]` | A thumb (horizontal/vertical) |
 
 ## Recipes
 
